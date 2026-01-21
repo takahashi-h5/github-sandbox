@@ -7,16 +7,13 @@ on:
       - test
 
 jobs:
-  api-execution:
+  check-secret:
     runs-on: ubuntu-latest
     
     # ここで「どの環境のSecretを使うか」を指定します
     # productionブランチならprod、それ以外（testブランチ）ならqaを選択
     environment: ${{ github.ref_name == 'production' && 'prod' || 'qa' }}
 
-jobs:
-  check-secret:
-    runs-on: ubuntu-latest
     steps:
       - name: Environment Variable Echo Test
         env:
