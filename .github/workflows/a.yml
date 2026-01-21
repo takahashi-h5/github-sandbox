@@ -19,7 +19,7 @@ jobs:
         env:
           API_TOKEN: ${{ secrets.APIKEY }} # Environment Secretsに登録した「APIKEY」を環境変数にセット
         run: |
-          echo "GitHub Actionsが起動しました。"
+          echo "GitHub Actionsが起動しました!"
           if [ "$API_TOKEN" = "hoge" ]; then
             echo "トークンはhogeです。"
           elif [ "$API_TOKEN" = "fuga" ]; then
