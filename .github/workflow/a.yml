@@ -1,0 +1,18 @@
+name: Simple API Key Check
+
+on:
+  push:
+    branches:
+      - main  # main系ブランチにpushされた時に実行
+
+jobs:
+  check-secret:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Environment Variable Echo Test
+        env:
+          API_TOKEN: ${{ secrets.APIKEY }} # GitHub Secretsに登録した「MY_API_KEY」を環境変数にセット
+        run: |
+          echo "GitHub Actionsが起動しました。"
+          echo "Secretの値を確認します。"
+          echo "VALUE: $API_TOKEN"
