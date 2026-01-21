@@ -3,7 +3,16 @@ name: Simple API Key Check
 on:
   push:
     branches:
-      - main  # main系ブランチにpushされた時に実行
+      - production
+      - test
+
+jobs:
+  api-execution:
+    runs-on: ubuntu-latest
+    
+    # ここで「どの環境のSecretを使うか」を指定します
+    # productionブランチならprod、それ以外（testブランチ）ならqaを選択
+    environment: ${{ github.ref_name == 'production' && 'prod' || 'qa' }}
 
 jobs:
   check-secret:
@@ -11,8 +20,13 @@ jobs:
     steps:
       - name: Environment Variable Echo Test
         env:
-          API_TOKEN: ${{ secrets.APIKEY }} # GitHub Secretsに登録した「MY_API_KEY」を環境変数にセット
+          API_TOKEN: ${{ secrets.APIKEY }} # Environment Secretsに登録した「APIKEY」を環境変数にセット
         run: |
           echo "GitHub Actionsが起動しました。"
-          echo "Secretの値を確認します。"
-          echo "VALUE: $API_TOKEN"
+          if [ "$API_TOKEN" = "hoge" ]; then
+            echo "トークンはhogeです。"
+          elif [ "$API_TOKEN" = "fuga" ]; then
+            echo "トークンはfugaです。"
+          else
+            echo "それ以外の値、またはSecretが空です。"
+          fi
