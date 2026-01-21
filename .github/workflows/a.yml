@@ -21,9 +21,9 @@ jobs:
         run: |
           echo "GitHub Actionsが起動しました!"
           if [ "$API_TOKEN" = "hoge" ]; then
-            echo "トークンはhogeです。"
+            echo "トークンはhogeです!!"
           elif [ "$API_TOKEN" = "fuga" ]; then
-            echo "トークンはfugaです。"
+            echo "トークンはfugaです!!"
           else
             echo "それ以外の値、またはSecretが空です。"
           fi
