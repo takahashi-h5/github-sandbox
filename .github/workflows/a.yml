@@ -21,9 +21,9 @@ jobs:
         run: |
           echo "GitHub Actionsが起動しました。"
           if [ "$API_TOKEN" = "hoge" ]; then
-            echo "ブランチはproductionです。"
-          elif [ "$API_TOKEN" = "fuga" ]; then
             echo "ブランチはtestです。"
+          elif [ "$API_TOKEN" = "fuga" ]; then
+            echo "ブランチはproductionです。"
           else
             echo "それ以外の値、またはSecretが空です。"
           fi
