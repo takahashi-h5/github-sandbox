@@ -23,7 +23,7 @@ jobs:
         run: |
           echo "変更されたファイルの一覧:"
           for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
-            echo "- $file"
+            echo "$file"
           done
 
       # ファイルに保存してアーティファクトとして残す例
