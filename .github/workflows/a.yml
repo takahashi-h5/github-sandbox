@@ -1,29 +1,34 @@
-name: Simple API Key Check
+name: List Merged Files
 
 on:
-  push:
+  pull_request:
+    types: [closed]
     branches:
       - production
       - test
-
 jobs:
-  check-secret:
+  list-files:
+    # PRがマージされた場合のみ実行
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
-    
-    # ここで「どの環境のSecretを使うか」を指定します
-    # productionブランチならprod、それ以外（testブランチ）ならqaを選択
-    environment: ${{ github.ref_name == 'production' && 'prod' || 'qa' }}
-
     steps:
-      - name: Environment Variable Echo Test
-        env:
-          API_TOKEN: ${{ secrets.APIKEY }} # Environment Secretsに登録した「APIKEY」を環境変数にセット
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # 全履歴を取得しないと差分が計算できない場合があります
+
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v44
+
+      - name: List all changed files
         run: |
-          echo "GitHub Actionsが起動しました。"
-          if [ "$API_TOKEN" = "hoge" ]; then
-            echo "ブランチはtestです。"
-          elif [ "$API_TOKEN" = "fuga" ]; then
-            echo "ブランチはproductionです。"
-          else
-            echo "それ以外の値、またはSecretが空です。"
-          fi
+          echo "変更されたファイルの一覧:"
+          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+            echo "- $file"
+          done
+
+      # ファイルに保存してアーティファクトとして残す例
+      - name: Save file list
+        run: |
+          echo "${{ steps.changed-files.outputs.all_changed_files }}" > merged_files.txt
