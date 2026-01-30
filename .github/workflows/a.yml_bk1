@@ -10,6 +10,15 @@ jobs:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # 全履歴を取得しないと差分が計算できない場合があります
+
+      # - name: Get changed files
+      #   id: changed-files
+      #   uses: tj-actions/changed-files@v44
+
       # gh api を使ってPRのファイル一覧を取得し、jqでファイル名のみを抽出
       - name: Get changed files via GitHub API
               env:
