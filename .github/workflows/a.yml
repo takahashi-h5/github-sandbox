@@ -3,10 +3,7 @@ name: List Merged Files
 on:
   pull_request:
     types: [closed]
-    branches:
-      - main
-      - production
-      - test
+    branches: [main]
 jobs:
   list-files:
     # PRがマージされた場合のみ実行
