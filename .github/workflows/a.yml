@@ -1,22 +1,18 @@
-name: List Merged Files
+name: Artifact Upload Demo
 
-on:
-  pull_request:
-    types: [closed]
-    branches: [main]
+on: push  # コードがpushされたら実行
+
 jobs:
-  list-files:
-    # PRがマージされた場合のみ実行
-    if: github.event.pull_request.merged == true
+  build-and-upload:
     runs-on: ubuntu-latest
     steps:
-      # gh api を使ってPRのファイル一覧を取得し、jqでファイル名のみを抽出
-      - name: Get changed files via GitHub API
-        env:
-          GH_TOKEN: ${{ github.token }}
-          PR_URL: ${{ github.event.pull_request.html_url }}
-        run: |
-          gh api repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/files --paginate \
-          | jq -r '.[].filename' > changed_files.txt
-          echo "--- Changed Files ---"
-          cat changed_files.txt
+      # 1. テスト用のファイルを作成
+      - name: Create a file
+        run: echo "Hello, GitHub Actions!" > output.txt
+
+      # 2. Artifactとしてアップロード
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sample  # ダウンロード時の名前
+          path: output    # アップロードしたいファイルやフォルダのパス
